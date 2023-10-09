@@ -1,0 +1,35 @@
+version: 0.2
+env:
+  variables:
+    SAM_CLI_TELEMETRY: 0
+    GOOS: linux
+    GOARCH: arm64
+phases:
+  install:
+    runtime-versions:
+      golang: 1.20
+    commands:
+      - mkdir dist
+      - sam --version
+      - go version
+  pre_build:
+    commands:
+      - echo Testing...
+      - GOARCH=amd64 GOOS=linux go test ./... -v 2>&1
+  build:
+    commands:
+      - echo Building SAM templates...
+      - sam build -t deployments/htmx.yaml -b .aws-sam/htmx
+  post_build:
+    commands:
+      - echo Uploading SAM packages
+      - sam package -t .aws-sam/htmx/template.yaml --no-progressbar --s3-bucket ${S3_BUCKET} --s3-prefix htmx-cognito/htmx --output-template-file dist/htmx-packaged.yaml
+artifacts:
+  files:
+    - 'dist/**/*'
+  secondary-artifacts:
+    builtArtifacts:
+      base-directory: 'dist'
+      files:
+        - '*.yaml'
+      discard-paths: yes

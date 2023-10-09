@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Cognito for testing htmx
+Resources:
+  HtmxUsers:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: htmx
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: False
+          RequireNumbers: False
+          RequireSymbols: False
+          RequireUppercase: False
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Required: True
+          Mutable: true
+        - Name: name
+          AttributeDataType: String
+          Required: True
+          Mutable: true
