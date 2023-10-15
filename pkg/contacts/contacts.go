@@ -1,7 +1,7 @@
 package contacts
 
 import (
-	"html/template"
+	"github.com/mousedownco/htmx-cognito/pkg/views"
 	"net/http"
 )
 
@@ -26,7 +26,7 @@ func (s *Service) Search(_ string) []Contact {
 	return contacts
 }
 
-func IndexHandler(svc Service, tmpl *template.Template) http.HandlerFunc {
+func IndexHandler(svc Service, view *views.View) http.HandlerFunc {
 	return func(writer http.ResponseWriter, r *http.Request) {
 		var contacts []Contact
 		q := r.URL.Query().Get("q")
@@ -35,7 +35,7 @@ func IndexHandler(svc Service, tmpl *template.Template) http.HandlerFunc {
 		} else {
 			contacts = svc.All()
 		}
-		e := tmpl.ExecuteTemplate(writer, "contacts", contacts)
+		e := view.Render(writer, contacts)
 		if e != nil {
 			http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
 		}
