@@ -24,13 +24,15 @@ func main() {
 		log.Fatal(e)
 	}
 
+	cs := contacts.Service{}
+
 	fs := http.FileServer(http.Dir("../static/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.Handle("/", http.RedirectHandler("/contacts", http.StatusTemporaryRedirect))
-	http.HandleFunc("/contacts", contacts.IndexHandler(tmpls))
+	http.HandleFunc("/contacts", contacts.IndexHandler(cs, tmpls))
 
-	http.ListenAndServe(":8080", nil)
+	_ = http.ListenAndServe(":8080", nil)
 
 }
 
