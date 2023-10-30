@@ -1,6 +1,8 @@
 package views
 
 import (
+	"bytes"
+	"fmt"
 	"html/template"
 	"net/http"
 	"path/filepath"
@@ -28,12 +30,20 @@ func NewView(layout string, files ...string) *View {
 }
 
 type ViewData struct {
-	Data interface{}
+	Data map[string]interface{}
 }
 
-func (v *View) Render(w http.ResponseWriter, data interface{}) error {
+func (v *View) Render(w http.ResponseWriter, data map[string]interface{}) {
 	vd := ViewData{Data: data}
-	return v.Template.ExecuteTemplate(w, v.Layout, vd)
+	var rb bytes.Buffer
+	e := v.Template.ExecuteTemplate(&rb, v.Layout, vd)
+	if e != nil {
+		http.Error(w,
+			fmt.Sprintf("Error rendering template: %v", e),
+			http.StatusInternalServerError)
+	} else {
+		w.Write(rb.Bytes())
+	}
 }
 
 func layoutFiles(dir string) ([]string, error) {
