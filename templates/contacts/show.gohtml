@@ -1,0 +1,13 @@
+{{ define "content" }}
+    {{ with .Data.Contact }}
+    <h1>{{.First}} {{.Last}}</h1>
+    <div>
+        <div>Phone: {{.Phone}}</div>
+        <div>Email: {{.Email}}</div>
+    </div>
+    <p>
+        <a href="/contacts/{{.Id}}/edit">Edit</a>
+        <a href="/contacts">Back</a>
+    </p>
+    {{ end }}
+{{ end }}

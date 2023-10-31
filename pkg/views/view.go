@@ -39,7 +39,9 @@ type ViewData struct {
 }
 
 func (v *View) Render(w http.ResponseWriter, r *http.Request, data map[string]interface{}) {
-	vd := ViewData{Data: data, Flash: GetFlash(w, r)}
+	flash := GetFlash(w, r)
+	fmt.Printf("rendering with flash: %q\n", flash)
+	vd := ViewData{Data: data, Flash: flash}
 	var rb bytes.Buffer
 	e := v.Template.ExecuteTemplate(&rb, v.Layout, vd)
 	if e != nil {
@@ -47,7 +49,7 @@ func (v *View) Render(w http.ResponseWriter, r *http.Request, data map[string]in
 			fmt.Sprintf("Error rendering template: %v", e),
 			http.StatusInternalServerError)
 	} else {
-		w.Write(rb.Bytes())
+		_, _ = w.Write(rb.Bytes())
 	}
 }
 
@@ -64,6 +66,7 @@ func viewFiles(files []string) []string {
 }
 
 func Flash(w http.ResponseWriter, value string) {
+	fmt.Printf("setting flash: %q\n", value)
 	c := &http.Cookie{
 		Name:  FlashName,
 		Value: base64.URLEncoding.EncodeToString([]byte(value))}
@@ -74,13 +77,13 @@ func GetFlash(w http.ResponseWriter, r *http.Request) string {
 	c, e := r.Cookie(FlashName)
 	if e != nil {
 		if !errors.Is(e, http.ErrNoCookie) {
-			fmt.Sprintf("Error getting flash cookie: %v", e)
+			fmt.Printf("Error getting flash cookie: %v", e)
 		}
 		return ""
 	}
 	value, e := base64.URLEncoding.DecodeString(c.Value)
 	if e != nil {
-		fmt.Sprintf("Error decoding flash cookie: %v", e)
+		fmt.Printf("Error decoding flash cookie: %v", e)
 		return ""
 	}
 	dc := &http.Cookie{

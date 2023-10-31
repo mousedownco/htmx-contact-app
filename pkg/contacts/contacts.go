@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mousedownco/htmx-cognito/pkg/views"
-	"net/http"
 	"os"
 	"sort"
 	"strings"
@@ -66,6 +64,10 @@ func (s *Service) Search(q string) []Contact {
 	return results
 }
 
+func (s *Service) Find(id int) Contact {
+	return s.Contacts[id]
+}
+
 func (s *Service) Validate(c Contact) map[string]string {
 	vErrors := make(map[string]string)
 	if c.Email == "" {
@@ -99,64 +101,15 @@ func (s *Service) Save(c Contact) error {
 	return s.SaveDb()
 }
 
+func (s *Service) Delete(id int) error {
+	delete(s.Contacts, id)
+	return s.SaveDb()
+}
+
 func (s *Service) SaveDb() error {
 	dbb, err := json.MarshalIndent(s.All(), "", "  ")
 	if err != nil {
 		return err
 	}
 	return os.WriteFile(s.DbPath, dbb, os.ModePerm)
-}
-
-func HandleIndex(svc *Service, view *views.View) http.HandlerFunc {
-	return func(writer http.ResponseWriter, r *http.Request) {
-		var contacts []Contact
-		q := r.URL.Query().Get("q")
-		if q != "" {
-			contacts = svc.Search(q)
-		} else {
-			contacts = svc.All()
-		}
-		data := map[string]interface{}{
-			"Contacts": contacts,
-			"Query":    q,
-		}
-		view.Render(writer, r, data)
-	}
-}
-
-func HandleNewGet(view *views.View) http.HandlerFunc {
-	return func(writer http.ResponseWriter, r *http.Request) {
-		view.Render(writer, r, map[string]interface{}{
-			"Contact": Contact{},
-			"Errors":  map[string]string{},
-		})
-	}
-}
-
-func HandleNewPost(svc *Service, view *views.View) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		c := Contact{
-			First: r.FormValue("first_name"),
-			Last:  r.FormValue("last_name"),
-			Phone: r.FormValue("phone"),
-			Email: r.FormValue("email"),
-		}
-		vErrors := svc.Validate(c)
-		if len(vErrors) > 0 {
-			view.Render(w, r, map[string]interface{}{
-				"Contact": c,
-				"Errors":  vErrors,
-			})
-		} else {
-			e := svc.Save(c)
-			if e != nil {
-				view.Render(w, r, map[string]interface{}{
-					"Contact": c,
-					"Errors":  map[string]string{"General": e.Error()},
-				})
-			}
-			views.Flash(w, "Created New Contact!")
-			http.Redirect(w, r, "/contacts", http.StatusTemporaryRedirect)
-		}
-	}
 }
