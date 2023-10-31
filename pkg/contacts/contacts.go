@@ -7,6 +7,7 @@ import (
 	"github.com/mousedownco/htmx-cognito/pkg/views"
 	"net/http"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -45,6 +46,9 @@ func (s *Service) All() []Contact {
 	for _, c := range s.Contacts {
 		contacts = append(contacts, c)
 	}
+	sort.Slice(contacts, func(l, r int) bool {
+		return contacts[l].Id < contacts[r].Id
+	})
 	return contacts
 }
 
@@ -96,11 +100,7 @@ func (s *Service) Save(c Contact) error {
 }
 
 func (s *Service) SaveDb() error {
-	var contacts []Contact
-	for _, c := range s.Contacts {
-		contacts = append(contacts, c)
-	}
-	dbb, err := json.MarshalIndent(contacts, "", "  ")
+	dbb, err := json.MarshalIndent(s.All(), "", "  ")
 	if err != nil {
 		return err
 	}

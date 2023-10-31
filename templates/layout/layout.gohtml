@@ -18,6 +18,10 @@
                 <sub-title>A Demo Contacts Application</sub-title>
             </h1>
         </header>
+
+        {{ with .Flash }}
+        <div class="flash">{{ . }}</div>
+        {{ end }}
         {{ template "content" .}}
     </main>
     </body>
