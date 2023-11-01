@@ -1,0 +1,24 @@
+{{ define "layout"}}
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <title>&lt;/&gt; Contacts.App - Web 1.0</title>
+        <link rel="stylesheet" href="/static/site.css">
+        <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1/dist/missing.min.css">
+    </head>
+    <main>
+        <header>
+            <h1>
+                <span class="allcaps">contacts.app</span>
+                <sub-title>A Demo Contacts Application</sub-title>
+            </h1>
+        </header>
+
+        {{ with .Flash }}
+            <div class="flash">{{ . }}</div>
+        {{ end }}
+        {{ template "content" .}}
+    </main>
+    </body>
+    </html>
+{{ end }}
