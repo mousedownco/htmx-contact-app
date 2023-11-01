@@ -5,11 +5,17 @@ This repository contains a Go implementation for the example `Contacts.App` proj
 After running into problems getting the book's [Python/Flask based Contact App example][0] working, I decided to just re-implement it in Go.
 
 > [!NOTE]  
-> This repository will eventually contain a branch for the Web 1.0 version without `htmx` and one for the `htmx` implementation described in the book.
+> The branch you are currently viewing contains the [Web 1.0 Application from Chapter 3][2] of the book.
 
-# Web 1.0 Application
+# Running
 
-The branch you are currently viewing contains the [Web 1.0 Application from Chapter 3][2] of the book.
+The example application required Go 1.21 or higher, and can be run with the following command from the top of the repository.
+
+```shell
+go run ./cmd/main.go 
+```
+
+The app can be accessed at [http://localhost:8080/](http://localhost:8080/).
 
 # Go References
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/sessions"
 	"html/template"
+	"log"
 	"net/http"
 	"path/filepath"
 )
@@ -67,20 +68,20 @@ var store = sessions.NewCookieStore([]byte("a-secret-string"))
 func Flash(w http.ResponseWriter, r *http.Request, value string) {
 	session, e := store.Get(r, FlashName)
 	if e != nil {
-		fmt.Printf("Error getting session: %v\n", e)
+		log.Printf("Error getting session: %v\n", e)
 		return
 	}
 	session.AddFlash(value, "message")
 	e = session.Save(r, w)
 	if e != nil {
-		fmt.Printf("Error saving session: %v\n", e)
+		log.Printf("Error saving session: %v\n", e)
 	}
 }
 
 func GetFlash(w http.ResponseWriter, r *http.Request) string {
 	session, e := store.Get(r, FlashName)
 	if e != nil {
-		fmt.Printf("Error loading session: %v\n", e)
+		log.Printf("Error loading session: %v\n", e)
 		return ""
 	}
 
