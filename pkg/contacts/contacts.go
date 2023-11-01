@@ -18,14 +18,14 @@ type Contact struct {
 }
 
 func NewService(dbPath string) *Service {
-	dbb, err := os.ReadFile(dbPath)
-	if err != nil {
-		panic(err)
+	dbb, e := os.ReadFile(dbPath)
+	if e != nil {
+		panic(e)
 	}
 	var contacts []Contact
-	err = json.Unmarshal(dbb, &contacts)
-	if err != nil {
-		panic(err)
+	e = json.Unmarshal(dbb, &contacts)
+	if e != nil {
+		panic(e)
 	}
 	db := make(map[int]Contact)
 	for _, c := range contacts {
@@ -107,9 +107,9 @@ func (s *Service) Delete(id int) error {
 }
 
 func (s *Service) SaveDb() error {
-	dbb, err := json.MarshalIndent(s.All(), "", "  ")
-	if err != nil {
-		return err
+	dbb, e := json.MarshalIndent(s.All(), "", "  ")
+	if e != nil {
+		return e
 	}
 	return os.WriteFile(s.DbPath, dbb, os.ModePerm)
 }

@@ -38,7 +38,6 @@ type ViewData struct {
 
 func (v *View) Render(w http.ResponseWriter, r *http.Request, data map[string]interface{}) {
 	flash := GetFlash(w, r)
-	fmt.Printf("rendering with flash: %q\n", flash)
 	vd := ViewData{Data: data, Flash: flash}
 	var rb bytes.Buffer
 	e := v.Template.ExecuteTemplate(&rb, v.Layout, vd)
@@ -68,7 +67,6 @@ var store = sessions.NewCookieStore([]byte("a-secret-string"))
 func Flash(w http.ResponseWriter, r *http.Request, value string) {
 	session, e := store.Get(r, FlashName)
 	if e != nil {
-		//http.Error(w, err.Error(), http.StatusInternalServerError)
 		fmt.Printf("Error getting session: %v\n", e)
 		return
 	}
@@ -80,15 +78,14 @@ func Flash(w http.ResponseWriter, r *http.Request, value string) {
 }
 
 func GetFlash(w http.ResponseWriter, r *http.Request) string {
-	session, err := store.Get(r, FlashName)
-	if err != nil {
-		//http.Error(w, err.Error(), http.StatusInternalServerError)
+	session, e := store.Get(r, FlashName)
+	if e != nil {
+		fmt.Printf("Error loading session: %v\n", e)
 		return ""
 	}
 
 	fm := session.Flashes("message")
 	if fm == nil {
-		fmt.Printf("No flash messages")
 		return ""
 	}
 
