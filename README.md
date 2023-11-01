@@ -1,6 +1,6 @@
 # Contacts.App - Web 1.0
 
-This repository contains a Go implementation for the example `Contacts.App` project used in the [Hypermedia Systems book][1].
+This repository contains a Go implementation of the example `Contacts.App` project used in the [Hypermedia Systems book][1].
 
 > [!NOTE]  
 > This branch contains the [Web 1.0 Application from Chapter 3][2] of the book.
