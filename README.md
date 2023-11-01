@@ -9,13 +9,13 @@ After running into problems getting the book's [Python/Flask based Contact App e
 
 # Running
 
-The example application required Go 1.21 or higher, and can be run with the following command from the top of the repository.
+The following command will start the server that runs the `Contacts.App` application.
 
 ```shell
 go run ./cmd/main.go 
 ```
 
-The app can be accessed at [http://localhost:8080/](http://localhost:8080/).
+Once the server is running, the app can be accessed in your browser at [http://localhost:8080/](http://localhost:8080/). Use `ctrl+c` to stop the server.
 
 # Go References
 
