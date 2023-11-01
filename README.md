@@ -1,4 +1,4 @@
-# htmx-cognito
+# htmx-contact-app
 PoC Integrating htmx with AWS Cognito User Pools
 
 https://hypermedia.systems/

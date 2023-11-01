@@ -2,13 +2,11 @@ package views
 
 import (
 	"bytes"
-	"encoding/base64"
-	"errors"
 	"fmt"
+	"github.com/gorilla/sessions"
 	"html/template"
 	"net/http"
 	"path/filepath"
-	"time"
 )
 
 var TemplatesDir = "templates"
@@ -65,31 +63,35 @@ func viewFiles(files []string) []string {
 	return paths
 }
 
-func Flash(w http.ResponseWriter, value string) {
-	fmt.Printf("setting flash: %q\n", value)
-	c := &http.Cookie{
-		Name:  FlashName,
-		Value: base64.URLEncoding.EncodeToString([]byte(value))}
-	http.SetCookie(w, c)
+var store = sessions.NewCookieStore([]byte("a-secret-string"))
+
+func Flash(w http.ResponseWriter, r *http.Request, value string) {
+	session, e := store.Get(r, FlashName)
+	if e != nil {
+		//http.Error(w, err.Error(), http.StatusInternalServerError)
+		fmt.Printf("Error getting session: %v\n", e)
+		return
+	}
+	session.AddFlash(value, "message")
+	e = session.Save(r, w)
+	if e != nil {
+		fmt.Printf("Error saving session: %v\n", e)
+	}
 }
 
 func GetFlash(w http.ResponseWriter, r *http.Request) string {
-	c, e := r.Cookie(FlashName)
-	if e != nil {
-		if !errors.Is(e, http.ErrNoCookie) {
-			fmt.Printf("Error getting flash cookie: %v", e)
-		}
+	session, err := store.Get(r, FlashName)
+	if err != nil {
+		//http.Error(w, err.Error(), http.StatusInternalServerError)
 		return ""
 	}
-	value, e := base64.URLEncoding.DecodeString(c.Value)
-	if e != nil {
-		fmt.Printf("Error decoding flash cookie: %v", e)
+
+	fm := session.Flashes("message")
+	if fm == nil {
+		fmt.Printf("No flash messages")
 		return ""
 	}
-	dc := &http.Cookie{
-		Name:    FlashName,
-		MaxAge:  -1,
-		Expires: time.Unix(1, 0)}
-	http.SetCookie(w, dc)
-	return string(value)
+
+	_ = session.Save(r, w)
+	return fmt.Sprintf("%v", fm[0])
 }

@@ -56,7 +56,7 @@ func HandleNewPost(svc *Service, view *views.View) http.HandlerFunc {
 					"Errors":  map[string]string{"General": e.Error()},
 				})
 			}
-			views.Flash(w, "Created New Contact!")
+			views.Flash(w, r, "Created New Contact!")
 			http.Redirect(w, r, "/contacts", http.StatusFound)
 		}
 	}
@@ -130,7 +130,7 @@ func HandleEditPost(svc *Service, view *views.View) http.HandlerFunc {
 					"Errors":  map[string]string{"General": e.Error()},
 				})
 			}
-			views.Flash(w, "Updated Contact!")
+			views.Flash(w, r, "Updated Contact!")
 			http.Redirect(w, r, fmt.Sprintf("/contacts/%d", c.Id), http.StatusFound)
 		}
 	}
@@ -156,7 +156,7 @@ func HandleDeletePost(svc *Service, view *views.View) http.HandlerFunc {
 				"Errors":  map[string]string{"General": e.Error()},
 			})
 		}
-		views.Flash(w, "Deleted Contact!")
+		views.Flash(w, r, "Deleted Contact!")
 		http.Redirect(w, r, "/contacts", http.StatusFound)
 	}
 }
