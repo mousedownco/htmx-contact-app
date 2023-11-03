@@ -32,8 +32,8 @@ func main() {
 		contacts2.HandleEdit(cs, views.NewView("layout", "contacts/edit.gohtml"))).Methods("GET")
 	r.Handle("/contacts/{id:[0-9]+}/edit",
 		contacts2.HandleEditPost(cs, views.NewView("layout", "contacts/edit.gohtml"))).Methods("POST")
-	r.Handle("/contacts/{id:[0-9]+}/delete",
-		contacts2.HandleDeletePost(cs, views.NewView("layout", "contacts/edit.gohtml"))).Methods("POST")
+	r.Handle("/contacts/{id:[0-9]+}",
+		contacts2.HandleDelete(cs, views.NewView("layout", "contacts/edit.gohtml"))).Methods("DELETE")
 	log.Printf("Starting server on port %s", port)
 	http.Handle("/", r)
 	_ = http.ListenAndServe(port, nil)

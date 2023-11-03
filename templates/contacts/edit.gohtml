@@ -42,10 +42,11 @@
                 <button>Save</button>
             </fieldset>
         </form>
-        <form action="/contacts/{{ .Contact.Id }}/delete"
-              method="post">
-            <button>Delete Contact</button>
-        </form>
+        <button hx-target="body"
+                hx-push-url="true"
+                hx-confirm="Are you sure you want to delete this contact?"
+                hx-delete="/contacts/{{ .Contact.Id }}">Delete Contact
+        </button>
         <p>
             <a href="/contacts">Back</a>
         </p>

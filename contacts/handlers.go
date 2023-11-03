@@ -136,7 +136,7 @@ func HandleEditPost(svc *Service, view *views.View) http.HandlerFunc {
 	}
 }
 
-func HandleDeletePost(svc *Service, view *views.View) http.HandlerFunc {
+func HandleDelete(svc *Service, view *views.View) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		mux.Vars(r)
 		id, e := strconv.Atoi(mux.Vars(r)["id"])
@@ -157,6 +157,6 @@ func HandleDeletePost(svc *Service, view *views.View) http.HandlerFunc {
 			})
 		}
 		views.Flash(w, r, "Deleted Contact!")
-		http.Redirect(w, r, "/contacts", http.StatusFound)
+		http.Redirect(w, r, "/contacts", http.StatusSeeOther)
 	}
 }
