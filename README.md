@@ -5,6 +5,12 @@ This repository contains a Go implementation of the example `Contacts.App` proje
 > [!NOTE]  
 > This branch contains the [htmx updates to the Contact App from chapter 5][6] of the book.
 
+# Pagination Examples
+
+[Chapter 5][6] illustrates three pagination techniques. The uncommented code in [index.gohtml](templates/contacts/index.gohtml) runs the "Infinite Scroll" implementation.  To really appreciate the technique, the browser window should be made very small or the contacts in [contacts.json](contacts.json) should be increased to the point where all contacts will not fit in the browser window.
+
+The "Basic Pagination" and "Load More Button" pagination techniques are implemented in [index.gohtml](templates/contacts/index.gohtml. To enable them, simply comment out the "Infinite Scroll" code and uncomment the code for the desired technique.
+
 # Running
 
 The following command will start the server that runs the `Contacts.App` application.

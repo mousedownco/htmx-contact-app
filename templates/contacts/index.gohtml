@@ -27,21 +27,52 @@
                 </td>
             </tr>
         {{ end }}
+        {{/* Load More Button Pagination */}}
+        {{/*        {{ if eq (len .Data.Contacts) 10 }}*/}}
+        {{/*            <tr>*/}}
+        {{/*                <td colspan="5"*/}}
+        {{/*                    style="text-align: center">*/}}
+        {{/*                    <button hx-target="closest tr"*/}}
+        {{/*                            hx-swap="outerHTML"*/}}
+        {{/*                            hx-select="tbody > tr"*/}}
+        {{/*                            hx-get="/contacts?page={{ add .Data.Page 1 }}">*/}}
+        {{/*                        Load More*/}}
+        {{/*                    </button>*/}}
+        {{/*                </td>*/}}
+        {{/*            </tr>*/}}
+        {{/*        {{ end }}*/}}
+
+        {{/* Infinite Scroll Pagination */}}
+        {{ if eq (len .Data.Contacts) 10 }}
+            <tr>
+                <td colspan="5"
+                    style="text-align: center">
+                    <span hx-target="closest tr"
+                            hx-trigger="revealed"
+                            hx-swap="outerHTML"
+                            hx-select="tbody > tr"
+                            hx-get="/contacts?page={{ add .Data.Page 1 }}">
+                        Loading More...
+                    </span>
+                </td>
+            </tr>
+        {{ end }}
         </tbody>
     </table>
 
 
     <div>
-    <span style="float: right">
-        {{ $prevPage := sub .Data.Page 1 }}
-        {{ $nextPage := add .Data.Page 1 }}
-        {{ if gt .Data.Page 1 }}
-          <a href="/contacts?page={{ $prevPage }}">Previous</a>
-        {{ end}}
-        {{ if eq (len .Data.Contacts) 10 }}
-          <a href="/contacts?page={{ $nextPage }}">Next</a>
-        {{ end }}
-    </span>
+        {{/* Basic Pagination */}}
+        {{/*    <span style="float: right">*/}}
+        {{/*        {{ $prevPage := sub .Data.Page 1 }}*/}}
+        {{/*        {{ $nextPage := add .Data.Page 1 }}*/}}
+        {{/*        {{ if gt .Data.Page 1 }}*/}}
+        {{/*          <a href="/contacts?page={{ $prevPage }}">Previous</a>*/}}
+        {{/*        {{ end}}*/}}
+        {{/*        {{ if eq (len .Data.Contacts) 10 }}*/}}
+        {{/*          <a href="/contacts?page={{ $nextPage }}">Next</a>*/}}
+        {{/*        {{ end }}*/}}
+        {{/*    </span>*/}}
     </div>
     <p>
         <a href="/contacts/new">Add Contact</a>
