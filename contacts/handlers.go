@@ -11,13 +11,19 @@ import (
 func HandleIndex(svc *Service, view *views.View) http.HandlerFunc {
 	return func(writer http.ResponseWriter, r *http.Request) {
 		var contacts []Contact
+		page := 1
+		pageParam := r.URL.Query().Get("page")
+		if pageParam != "" {
+			page, _ = strconv.Atoi(pageParam)
+		}
 		q := r.URL.Query().Get("q")
 		if q != "" {
 			contacts = svc.Search(q)
 		} else {
-			contacts = svc.All()
+			contacts = svc.All(page)
 		}
 		data := map[string]interface{}{
+			"Page":     page,
 			"Contacts": contacts,
 			"Query":    q,
 		}

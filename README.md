@@ -3,7 +3,7 @@
 This repository contains a Go implementation of the example `Contacts.App` project used in the [Hypermedia Systems book][1].
 
 > [!NOTE]  
-> This branch contains the [htmx version of the Contact App in chapter 5][6] of the book.
+> This branch contains the [htmx updates to the Contact App from chapter 5][6] of the book.
 
 # Running
 

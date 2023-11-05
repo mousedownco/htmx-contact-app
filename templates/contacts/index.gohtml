@@ -29,6 +29,20 @@
         {{ end }}
         </tbody>
     </table>
+
+
+    <div>
+    <span style="float: right">
+        {{ $prevPage := sub .Data.Page 1 }}
+        {{ $nextPage := add .Data.Page 1 }}
+        {{ if gt .Data.Page 1 }}
+          <a href="/contacts?page={{ $prevPage }}">Previous</a>
+        {{ end}}
+        {{ if eq (len .Data.Contacts) 10 }}
+          <a href="/contacts?page={{ $nextPage }}">Next</a>
+        {{ end }}
+    </span>
+    </div>
     <p>
         <a href="/contacts/new">Add Contact</a>
     </p>
