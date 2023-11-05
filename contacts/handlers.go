@@ -160,3 +160,21 @@ func HandleDelete(svc *Service, view *views.View) http.HandlerFunc {
 		http.Redirect(w, r, "/contacts", http.StatusSeeOther)
 	}
 }
+
+func HandleEmailGet(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		mux.Vars(r)
+		id, e := strconv.Atoi(mux.Vars(r)["id"])
+		if e != nil {
+			http.Error(w, "Contact Not Found", http.StatusNotFound)
+			return
+		}
+		c := svc.Find(id)
+		if (c == Contact{}) {
+			http.Error(w, "Contact Not Found", http.StatusNotFound)
+			return
+		}
+		c.Email = r.FormValue("email")
+		_, _ = w.Write([]byte(svc.Validate(c)["Email"]))
+	}
+}

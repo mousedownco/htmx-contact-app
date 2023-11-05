@@ -8,6 +8,8 @@
                     <input name="email"
                            id="email"
                            type="email"
+                           hx-get="/contacts/{{ .Contact.Id }}/email"
+                           hx-target="next .error"
                            placeholder="Email"
                            value="{{ .Contact.Email }}">
                     <span class="error">{{ .Errors.Email }}</span>
