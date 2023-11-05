@@ -11,13 +11,19 @@ import (
 func HandleIndex(svc *Service, view *views.View) http.HandlerFunc {
 	return func(writer http.ResponseWriter, r *http.Request) {
 		var contacts []Contact
+		page := 1
+		pageParam := r.URL.Query().Get("page")
+		if pageParam != "" {
+			page, _ = strconv.Atoi(pageParam)
+		}
 		q := r.URL.Query().Get("q")
 		if q != "" {
 			contacts = svc.Search(q)
 		} else {
-			contacts = svc.All()
+			contacts = svc.All(page)
 		}
 		data := map[string]interface{}{
+			"Page":     page,
 			"Contacts": contacts,
 			"Query":    q,
 		}
@@ -136,7 +142,7 @@ func HandleEditPost(svc *Service, view *views.View) http.HandlerFunc {
 	}
 }
 
-func HandleDeletePost(svc *Service, view *views.View) http.HandlerFunc {
+func HandleDelete(svc *Service, view *views.View) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		mux.Vars(r)
 		id, e := strconv.Atoi(mux.Vars(r)["id"])
@@ -157,6 +163,24 @@ func HandleDeletePost(svc *Service, view *views.View) http.HandlerFunc {
 			})
 		}
 		views.Flash(w, r, "Deleted Contact!")
-		http.Redirect(w, r, "/contacts", http.StatusFound)
+		http.Redirect(w, r, "/contacts", http.StatusSeeOther)
+	}
+}
+
+func HandleEmailGet(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		mux.Vars(r)
+		id, e := strconv.Atoi(mux.Vars(r)["id"])
+		if e != nil {
+			http.Error(w, "Contact Not Found", http.StatusNotFound)
+			return
+		}
+		c := svc.Find(id)
+		if (c == Contact{}) {
+			http.Error(w, "Contact Not Found", http.StatusNotFound)
+			return
+		}
+		c.Email = r.FormValue("email")
+		_, _ = w.Write([]byte(svc.Validate(c)["Email"]))
 	}
 }

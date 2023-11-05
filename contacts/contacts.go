@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const PageSize = 10
+
 type Contact struct {
 	Id    int    `json:"id"`
 	First string `json:"first"`
@@ -39,7 +41,7 @@ type Service struct {
 	Contacts map[int]Contact
 }
 
-func (s *Service) All() []Contact {
+func (s *Service) All(page ...int) []Contact {
 	var contacts []Contact
 	for _, c := range s.Contacts {
 		contacts = append(contacts, c)
@@ -47,6 +49,17 @@ func (s *Service) All() []Contact {
 	sort.Slice(contacts, func(l, r int) bool {
 		return contacts[l].Id < contacts[r].Id
 	})
+	if len(page) > 0 {
+		start := PageSize * (page[0] - 1)
+		end := start + PageSize
+		if start > len(contacts) {
+			return []Contact{}
+		}
+		if end > len(contacts) {
+			end = len(contacts)
+		}
+		contacts = contacts[start:end]
+	}
 	return contacts
 }
 

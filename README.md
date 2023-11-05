@@ -1,9 +1,15 @@
-# Contacts.App - Web 1.0
+# Contacts.App - Htmx Patterns
 
 This repository contains a Go implementation of the example `Contacts.App` project used in the [Hypermedia Systems book][1].
 
 > [!NOTE]  
-> This branch contains the [Web 1.0 Application from Chapter 3][2] of the book.
+> This branch contains the [htmx updates to the Contact App from chapter 5][6] of the book.
+
+# Pagination Examples
+
+[Chapter 5][6] illustrates three pagination techniques. The uncommented code in [index.gohtml](templates/contacts/index.gohtml) runs the "Infinite Scroll" implementation.  To really appreciate the technique, the browser window should be made very small or the contacts in [contacts.json](contacts.json) should be increased to the point where all contacts will not fit in the browser window.
+
+The "Basic Pagination" and "Load More Button" pagination techniques are implemented in [index.gohtml](templates/contacts/index.gohtml. To enable them, simply comment out the "Infinite Scroll" code and uncomment the code for the desired technique.
 
 # Running
 
@@ -31,3 +37,4 @@ After running into problems getting the book's [Python/Flask based Contact App e
 [3]: https://www.calhoun.io/intro-to-templates-p4-v-in-mvc/ "Creating the V in MVC"
 [4]: https://github.com/gorilla/mux "Gorilla Mux"
 [5]: https://github.com/gorilla/sessions "Gorilla Sessions"
+[6]: https://hypermedia.systems/htmx-in-action/ "Chapter 05 - Htmx Patterns"

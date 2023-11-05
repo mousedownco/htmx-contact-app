@@ -14,6 +14,11 @@ var TemplatesDir = "templates"
 var LayoutDir = "layout"
 var FlashName = "_flash"
 
+var StandardFunctions = template.FuncMap{
+	"add": func(a, b int) int { return a + b },
+	"sub": func(a, b int) int { return a - b },
+}
+
 type View struct {
 	Template *template.Template
 	Layout   string
@@ -25,7 +30,7 @@ func NewView(layout string, files ...string) *View {
 		panic(e)
 	}
 	tmplFiles = append(tmplFiles, viewFiles(files)...)
-	tmpl, e := template.ParseFiles(tmplFiles...)
+	tmpl, e := template.New("").Funcs(StandardFunctions).ParseFiles(tmplFiles...)
 	if e != nil {
 		panic(e)
 	}
