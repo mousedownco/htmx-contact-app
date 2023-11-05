@@ -1,9 +1,9 @@
-# Contacts.App - Web 1.0
+# Contacts.App - Htmx Patterns
 
 This repository contains a Go implementation of the example `Contacts.App` project used in the [Hypermedia Systems book][1].
 
 > [!NOTE]  
-> This branch contains the [Web 1.0 Application from Chapter 3][2] of the book.
+> This branch contains the [htmx version of the Contact App in chapter 5][6] of the book.
 
 # Running
 
@@ -31,3 +31,4 @@ After running into problems getting the book's [Python/Flask based Contact App e
 [3]: https://www.calhoun.io/intro-to-templates-p4-v-in-mvc/ "Creating the V in MVC"
 [4]: https://github.com/gorilla/mux "Gorilla Mux"
 [5]: https://github.com/gorilla/sessions "Gorilla Sessions"
+[6]: https://hypermedia.systems/htmx-in-action/ "Chapter 05 - Htmx Patterns"
