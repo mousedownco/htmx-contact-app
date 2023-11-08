@@ -9,8 +9,7 @@
            value="{{ .Data.Query }}"
            hx-get="/contacts"
            hx-trigger="search, keyup delay:200ms changed"
-           hx-target="tbody"
-           hx-select="tbody tr"/>
+           hx-target="tbody"/>
     <input type="submit"
            value="Search"/>
     </form>
@@ -25,18 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        {{ range .Data.Contacts }}
-            <tr>
-                <td>{{ .First }}</td>
-                <td>{{ .Last }}</td>
-                <td>{{ .Phone }}</td>
-                <td>{{ .Email }}</td>
-                <td>
-                    <a href="/contacts/{{ .Id }}/edit">Edit</a>
-                    <a href="/contacts/{{ .Id }}">View</a>
-                </td>
-            </tr>
-        {{ end }}
+        {{ template "rows" .}}
         {{ if eq (len .Data.Contacts) 10 }}
             <tr>
                 <td colspan="5"

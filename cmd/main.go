@@ -21,9 +21,15 @@ func main() {
 	r.Handle("/",
 		http.RedirectHandler("/contacts", http.StatusTemporaryRedirect))
 	r.Handle("/contacts",
-		contacts.HandleIndex(cs, views.NewView("layout", "contacts/index.gohtml")))
+		contacts.HandleIndex(cs,
+			views.NewView("partial", "contacts/rows.gohtml"))).
+		Headers("HX-Trigger", "search")
+	r.Handle("/contacts",
+		contacts.HandleIndex(cs,
+			views.NewView("layout", "contacts/index.gohtml", "contacts/rows.gohtml")))
 	r.Handle("/contacts/new",
-		contacts.HandleNew(views.NewView("layout", "contacts/new.gohtml"))).Methods("GET")
+		contacts.HandleNew(views.NewView("layout", "contacts/new.gohtml"))).
+		Methods("GET")
 	r.Handle("/contacts/new",
 		contacts.HandleNewPost(cs, views.NewView("layout", "contacts/new.gohtml"))).Methods("POST")
 	r.Handle("/contacts/{id:[0-9]+}",
