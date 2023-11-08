@@ -165,8 +165,8 @@ func HandleDelete(svc *Service, view *views.View) http.HandlerFunc {
 				"Errors":  map[string]string{"General": e.Error()},
 			})
 		}
-		views.Flash(w, r, "Deleted Contact!")
 		if r.Header.Get("HX-Trigger") == "delete-btn" {
+			views.Flash(w, r, "Deleted Contact!")
 			http.Redirect(w, r, "/contacts", http.StatusSeeOther)
 		} else {
 			_, _ = w.Write([]byte(""))
