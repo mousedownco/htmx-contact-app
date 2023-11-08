@@ -1,8 +1,18 @@
 {{ define "content"}}
-    <form action="/contacts" method="get" class="tool-bar">
-        <label for="search">Search Term</label>
-        <input id="search" type="search" name="q" value="{{ .Data.Query }}"/>
-        <input type="submit" value="Search"/>
+<form action="/contacts"
+      method="get"
+      class="tool-bar">
+    <label for="search">Search Term</label>
+    <input id="search"
+           type="search"
+           name="q"
+           value="{{ .Data.Query }}"
+           hx-get="/contacts"
+           hx-trigger="search, keyup delay:200ms changed"
+           hx-target="tbody"
+           hx-select="tbody tr"/>
+    <input type="submit"
+           value="Search"/>
     </form>
     <table>
         <thead>
