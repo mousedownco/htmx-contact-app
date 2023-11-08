@@ -6,6 +6,7 @@ import (
 	"github.com/mousedownco/htmx-cognito/views"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func HandleIndex(svc *Service, view *views.View) http.HandlerFunc {
@@ -19,6 +20,8 @@ func HandleIndex(svc *Service, view *views.View) http.HandlerFunc {
 		q := r.URL.Query().Get("q")
 		if q != "" {
 			contacts = svc.Search(q)
+			// Sleep just so the indicator appears
+			time.Sleep(1 * time.Second)
 		} else {
 			contacts = svc.All(page)
 		}
