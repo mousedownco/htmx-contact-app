@@ -187,3 +187,12 @@ func HandleEmailGet(svc *Service) http.HandlerFunc {
 		_, _ = w.Write([]byte(svc.Validate(c)["Email"]))
 	}
 }
+
+func HandleCountGet(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Sleep just so the indicator appears
+		time.Sleep(1 * time.Second)
+		_, _ = w.Write([]byte(fmt.Sprintf(
+			"(%d total Contacts)", len(svc.Contacts))))
+	}
+}
