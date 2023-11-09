@@ -7,7 +7,7 @@ This repository contains a Go implementation of the example `Contacts.App` proje
 
 # Bulk Delete
 
-The book describes a [Bulk Delete][8] feature that uses the the `DELETE` method to send a form encoded request containing the IDs of the contacts to delete. This is not a standards-compliant use of `DELETE` and [Go's `Request.ParseForm()`][9] method will initialize the to an empty value.
+The book describes a [Bulk Delete][8] feature that uses the the `DELETE` method to send a form encoded request containing the IDs of the contacts to delete. This is not a standards-compliant use of `DELETE`. [Go's `Request.ParseForm()`][9] method will initialize the form to an empty value, so creating a similar implementation is not feasible using the standard Go libraries.
 
 The implementation in this repository has been modified to use `hx-post` to `/contacts/delete` instead. The handler is implemented to handle `POST` requests and the remaining functionality aligns with what is described in the book.
 
