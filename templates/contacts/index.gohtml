@@ -1,80 +1,53 @@
 {{ define "content"}}
-    <form action="/contacts" method="get" class="tool-bar">
+    <form action="/contacts"
+          method="get"
+          class="tool-bar">
         <label for="search">Search Term</label>
-        <input id="search" type="search" name="q" value="{{ .Data.Query }}"/>
-        <input type="submit" value="Search"/>
+        <input id="search"
+               type="search"
+               name="q"
+               value="{{ .Data.Query }}"
+               hx-get="/contacts"
+               hx-trigger="search, keyup delay:200ms changed"
+               hx-target="tbody"
+               hx-push-url="true"
+               hx-indicator="#spinner"/>
+        <img id="spinner"
+             class="htmx-indicator"
+             style="height: 20px"
+             src="/static/img/spinning-circles.svg"
+             alt="Request In Flight..."/>
+        <input type="submit"
+               value="Search"/>
     </form>
-    <table>
-        <thead>
-        <tr>
-            <th>First</th>
-            <th>Last</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {{ range .Data.Contacts }}
+    <form>
+        <table>
+            <thead>
             <tr>
-                <td>{{ .First }}</td>
-                <td>{{ .Last }}</td>
-                <td>{{ .Phone }}</td>
-                <td>{{ .Email }}</td>
-                <td>
-                    <a href="/contacts/{{ .Id }}/edit">Edit</a>
-                    <a href="/contacts/{{ .Id }}">View</a>
-                </td>
+                <th>First</th>
+                <th>Last</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th></th>
             </tr>
-        {{ end }}
-        {{/* Load More Button Pagination */}}
-        {{/*        {{ if eq (len .Data.Contacts) 10 }}*/}}
-        {{/*            <tr>*/}}
-        {{/*                <td colspan="5"*/}}
-        {{/*                    style="text-align: center">*/}}
-        {{/*                    <button hx-target="closest tr"*/}}
-        {{/*                            hx-swap="outerHTML"*/}}
-        {{/*                            hx-select="tbody > tr"*/}}
-        {{/*                            hx-get="/contacts?page={{ add .Data.Page 1 }}">*/}}
-        {{/*                        Load More*/}}
-        {{/*                    </button>*/}}
-        {{/*                </td>*/}}
-        {{/*            </tr>*/}}
-        {{/*        {{ end }}*/}}
-
-        {{/* Infinite Scroll Pagination */}}
-        {{ if eq (len .Data.Contacts) 10 }}
-            <tr>
-                <td colspan="5"
-                    style="text-align: center">
-                    <span hx-target="closest tr"
-                            hx-trigger="revealed"
-                            hx-swap="outerHTML"
-                            hx-select="tbody > tr"
-                            hx-get="/contacts?page={{ add .Data.Page 1 }}">
-                        Loading More...
-                    </span>
-                </td>
-            </tr>
-        {{ end }}
-        </tbody>
-    </table>
-
-
-    <div>
-        {{/* Basic Pagination */}}
-        {{/*    <span style="float: right">*/}}
-        {{/*        {{ $prevPage := sub .Data.Page 1 }}*/}}
-        {{/*        {{ $nextPage := add .Data.Page 1 }}*/}}
-        {{/*        {{ if gt .Data.Page 1 }}*/}}
-        {{/*          <a href="/contacts?page={{ $prevPage }}">Previous</a>*/}}
-        {{/*        {{ end}}*/}}
-        {{/*        {{ if eq (len .Data.Contacts) 10 }}*/}}
-        {{/*          <a href="/contacts?page={{ $nextPage }}">Next</a>*/}}
-        {{/*        {{ end }}*/}}
-        {{/*    </span>*/}}
-    </div>
+            </thead>
+            <tbody>
+            {{ template "rows" .}}
+            </tbody>
+        </table>
+        <button hx-post="/contacts/delete"
+                hx-confirm="Are you sure you want to delete these contacts?"
+                hx-target="body">
+            Delete Selected Contacts
+        </button>
+    </form>
     <p>
         <a href="/contacts/new">Add Contact</a>
+        <span hx-get="/contacts/count"
+              hx-trigger="revealed">
+            <img id="spinner"
+                 class="htmx-indicator"
+                 src="/static/img/spinning-circles.svg"/>
+        </span>
     </p>
 {{ end }}

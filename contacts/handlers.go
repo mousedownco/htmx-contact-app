@@ -6,24 +6,21 @@ import (
 	"github.com/mousedownco/htmx-cognito/views"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func HandleIndex(svc *Service, view *views.View) http.HandlerFunc {
 	return func(writer http.ResponseWriter, r *http.Request) {
 		var contacts []Contact
-		page := 1
-		pageParam := r.URL.Query().Get("page")
-		if pageParam != "" {
-			page, _ = strconv.Atoi(pageParam)
-		}
 		q := r.URL.Query().Get("q")
 		if q != "" {
 			contacts = svc.Search(q)
+			// Sleep just so the indicator appears
+			time.Sleep(1 * time.Second)
 		} else {
-			contacts = svc.All(page)
+			contacts = svc.All()
 		}
 		data := map[string]interface{}{
-			"Page":     page,
 			"Contacts": contacts,
 			"Query":    q,
 		}
@@ -162,8 +159,34 @@ func HandleDelete(svc *Service, view *views.View) http.HandlerFunc {
 				"Errors":  map[string]string{"General": e.Error()},
 			})
 		}
-		views.Flash(w, r, "Deleted Contact!")
-		http.Redirect(w, r, "/contacts", http.StatusSeeOther)
+		if r.Header.Get("HX-Trigger") == "delete-btn" {
+			views.Flash(w, r, "Deleted Contact!")
+			http.Redirect(w, r, "/contacts", http.StatusSeeOther)
+		} else {
+			_, _ = w.Write([]byte(""))
+		}
+	}
+}
+
+func HandleDeleteSelected(svc *Service, view *views.View) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		e := r.ParseForm()
+		if e != nil {
+			fmt.Sprintf("Error parsing form: %v", e)
+			return
+		}
+
+		values := r.Form["selected_contact_ids"]
+		fmt.Sprintf("Selected Contact Ids: %v", values)
+		for _, id := range r.Form["selected_contact_ids"] {
+			id, err := strconv.Atoi(id)
+			if err != nil {
+				fmt.Sprintf("Error converting id: %v", err)
+			} else {
+				svc.Delete(id)
+			}
+		}
+		view.Render(w, r, map[string]interface{}{"Contacts": svc.All()})
 	}
 }
 
@@ -182,5 +205,14 @@ func HandleEmailGet(svc *Service) http.HandlerFunc {
 		}
 		c.Email = r.FormValue("email")
 		_, _ = w.Write([]byte(svc.Validate(c)["Email"]))
+	}
+}
+
+func HandleCountGet(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Sleep just so the indicator appears
+		time.Sleep(1 * time.Second)
+		_, _ = w.Write([]byte(fmt.Sprintf(
+			"(%d total Contacts)", len(svc.Contacts))))
 	}
 }
