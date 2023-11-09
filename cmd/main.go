@@ -24,6 +24,10 @@ func main() {
 		contacts.HandleIndex(cs,
 			views.NewView("partial", "contacts/rows.gohtml"))).
 		Headers("HX-Trigger", "search")
+	// This handler differs from the book's implementation, see README for details
+	r.Handle("/contacts/delete",
+		contacts.HandleDeleteSelected(cs,
+			views.NewView("layout", "contacts/index.gohtml", "contacts/rows.gohtml"))).Methods("POST")
 	r.Handle("/contacts",
 		contacts.HandleIndex(cs,
 			views.NewView("layout", "contacts/index.gohtml", "contacts/rows.gohtml")))

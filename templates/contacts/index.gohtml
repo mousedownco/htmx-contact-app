@@ -20,34 +20,27 @@
         <input type="submit"
                value="Search"/>
     </form>
-    <table>
-        <thead>
-        <tr>
-            <th>First</th>
-            <th>Last</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {{ template "rows" .}}
-        {{ if eq (len .Data.Contacts) 10 }}
+    <form>
+        <table>
+            <thead>
             <tr>
-                <td colspan="5"
-                    style="text-align: center">
-                    <span hx-target="closest tr"
-                          hx-trigger="revealed"
-                          hx-swap="outerHTML"
-                          hx-select="tbody > tr"
-                          hx-get="/contacts?page={{ add .Data.Page 1 }}">
-                        Loading More...
-                    </span>
-                </td>
+                <th>First</th>
+                <th>Last</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th></th>
             </tr>
-        {{ end }}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {{ template "rows" .}}
+            </tbody>
+        </table>
+        <button hx-post="/contacts/delete"
+                hx-confirm="Are you sure you want to delete these contacts?"
+                hx-target="body">
+            Delete Selected Contacts
+        </button>
+    </form>
     <p>
         <a href="/contacts/new">Add Contact</a>
         <span hx-get="/contacts/count"

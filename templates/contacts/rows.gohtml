@@ -1,6 +1,9 @@
 {{ define "rows"}}
     {{ range .Data.Contacts }}
         <tr>
+            <td><input type="checkbox"
+                       name="selected_contact_ids"
+                       value="{{ .Id }}"></td>
             <td>{{ .First }}</td>
             <td>{{ .Last }}</td>
             <td>{{ .Phone }}</td>
