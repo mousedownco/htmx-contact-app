@@ -3,7 +3,7 @@ package contacts
 import (
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/mousedownco/htmx-cognito/views"
+	"github.com/mousedownco/htmx-contact-app/views"
 	"net/http"
 	"strconv"
 )
