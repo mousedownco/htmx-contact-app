@@ -1,9 +1,9 @@
-# Contacts.App - Htmx Patterns
+# Chapter 06 - More Htmx Patterns
 
-This repository contains a Go implementation of the example `Contacts.App` project used in the [Hypermedia Systems book][1].
+Go implementation of the [example Contact App][0] code in Chapter 06 of the [Hypermedia Systems][1] book.
 
 > [!NOTE]  
-> This branch contains the [updates to the Contact App from chapter 6 "More Htmx Patterns"][7].
+> See the [main][2] branch for an index of all implemented chapters.
 
 # Bulk Delete
 
@@ -21,23 +21,8 @@ go run ./cmd/main.go
 
 Once the server is running, the app can be accessed in your browser at [http://localhost:8080/](http://localhost:8080/). Use `ctrl+c` to stop the server.
 
-# Go References
-
-This isn't the most idiomatic Go project as it tries to align itself as closely as possible with the [book's example project][0].
-
-The view elements are based on [Jon Calhoun's article "Creating the V in MVC"][3]. Routing and "Flash" messages are implemented using [Gorilla Mux][4] and [Gorilla Sessions][5] respectively.
-
-## Why?
-
-After running into problems getting the book's [Python/Flask based Contact App example][0] working, I decided to just re-implement it in Go.
-
 [0]: https://github.com/bigskysoftware/contact-app "Contact App"
 [1]: https://hypermedia.systems/ "Hypermedia Systems book"
-[2]: https://hypermedia.systems/a-web-1-0-application/ "Chapter 03 - A Web 1.0 Application"
-[3]: https://www.calhoun.io/intro-to-templates-p4-v-in-mvc/ "Creating the V in MVC"
-[4]: https://github.com/gorilla/mux "Gorilla Mux"
-[5]: https://github.com/gorilla/sessions "Gorilla Sessions"
-[6]: https://hypermedia.systems/htmx-in-action/ "Chapter 05 - Htmx Patterns"
-[7]: https://hypermedia.systems/more-htmx-patterns "Chapter 06 - More Htmx Patterns"
+[2]: https://github.com/mousedownco/htmx-contact-app "htmx-contact-app main"
 [8]: https://hypermedia.systems/more-htmx-patterns/#_bulk_delete "Bulk Delete"
 [9]: https://pkg.go.dev/net/http#Request.ParseForm "net/http - Request.ParseForm()"

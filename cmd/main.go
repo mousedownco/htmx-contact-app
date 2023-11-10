@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/mousedownco/htmx-cognito/contacts"
-	"github.com/mousedownco/htmx-cognito/views"
+	"github.com/mousedownco/htmx-contact-app/contacts"
+	"github.com/mousedownco/htmx-contact-app/views"
 	"log"
 	"net/http"
 )
