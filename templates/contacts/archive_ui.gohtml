@@ -17,6 +17,11 @@
                          style="width: {{ .ProgressPercent }}%"></div>
                 </div>
             </div>
+        {{ else if eq .Status "Complete" }}
+            <a hx-boost="false"
+               href="/contacts/archive/file">
+                Archive Ready!  Click here to download. &downarrow;
+            </a>
         {{ end }}
     </div>
 {{ end }}

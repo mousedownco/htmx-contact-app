@@ -49,6 +49,8 @@ func main() {
 
 	r.Handle("/contacts/archive",
 		contacts.HandleStartArchive(views.NewView("partial", "contacts/archive_ui.gohtml"))).Methods("POST", "GET")
+	r.Handle("/contacts/archive/file",
+		contacts.HandleArchiveContent()).Methods("GET")
 
 	log.Printf("Starting server on port %s", port)
 	http.Handle("/", r)

@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/mousedownco/htmx-contact-app/views"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 )
@@ -228,5 +229,20 @@ func HandleStartArchive(view *views.View) http.HandlerFunc {
 		view.Render(w, r, map[string]interface{}{
 			"Archiver": archiver,
 		})
+	}
+}
+
+func HandleArchiveContent() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		manager := GetArchiver()
+		archiveFile, e := os.Open(manager.ArchiveFile())
+		if e != nil {
+			http.Error(w, "Archive Not Found", http.StatusNotFound)
+			return
+		}
+		defer archiveFile.Close()
+		w.Header().Set("Content-Disposition", "attachment; filename=\"archive.json\"")
+		w.Header().Set("Content-Type", "application/json")
+		http.ServeContent(w, r, "archive.json", time.Now(), archiveFile)
 	}
 }
