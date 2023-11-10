@@ -246,3 +246,13 @@ func HandleArchiveContent() http.HandlerFunc {
 		http.ServeContent(w, r, "archive.json", time.Now(), archiveFile)
 	}
 }
+
+func HandleArchiveReset(view *views.View) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		archiver := GetArchiver()
+		archiver.Reset()
+		view.Render(w, r, map[string]interface{}{
+			"Archiver": archiver,
+		})
+	}
+}
