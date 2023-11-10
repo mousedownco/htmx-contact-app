@@ -7,11 +7,11 @@ This repository contains a Go implementation of the example [`Contacts App` proj
 
 Example code for select chapters are available in separate branches:
 
- * Branch [Ch03-A_Web_1.0_Application](../../tree/Ch03-A_Web_1.0_Application) - implements [Chapter 03 - A Web 1.0 Application][3]
- * Branch [Ch05-Htmx_Patterns](../../tree/Ch05-Htmx_Patterns) - implements [Chapter 05 - Htmx Patterns][5]
- * Branch [Ch06-More_Htmx_Patterns](../../tree/Ch06-More_Htmx_Patterns) - implements [Chapter 06 - More Htmx Patterns][6]
+ * [Chapter 03][3] - Branch [Ch03-A_Web_1.0_Application](../../tree/Ch03-A_Web_1.0_Application)
+ * [Chapter 05][5] - Branch [Ch05-Htmx_Patterns](../../tree/Ch05-Htmx_Patterns)
+ * [Chapter 06][6] - Branch [Ch06-More_Htmx_Patterns](../../tree/Ch06-More_Htmx_Patterns)
 
-# Implementation Notes
+## Implementation Notes
 
 This isn't the most idiomatic Go project as it tries to align itself as closely as possible with the [book's example project][0].
 
