@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/mousedownco/htmx-contact-app/views"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 )
@@ -22,6 +23,7 @@ func HandleIndex(svc *Service, view *views.View) http.HandlerFunc {
 		}
 		data := map[string]interface{}{
 			"Contacts": contacts,
+			"Archiver": GetArchiver(),
 			"Query":    q,
 		}
 		view.Render(writer, r, data)
@@ -172,18 +174,21 @@ func HandleDeleteSelected(svc *Service, view *views.View) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		e := r.ParseForm()
 		if e != nil {
-			fmt.Sprintf("Error parsing form: %v", e)
+			fmt.Printf("Error parsing form: %v", e)
 			return
 		}
 
 		values := r.Form["selected_contact_ids"]
-		fmt.Sprintf("Selected Contact Ids: %v", values)
+		fmt.Printf("Selected Contact Ids: %v", values)
 		for _, id := range r.Form["selected_contact_ids"] {
 			id, err := strconv.Atoi(id)
 			if err != nil {
-				fmt.Sprintf("Error converting id: %v", err)
+				fmt.Printf("Error converting id: %v", err)
 			} else {
-				svc.Delete(id)
+				err = svc.Delete(id)
+				if err != nil {
+					fmt.Printf("Error deleting contact: %v", err)
+				}
 			}
 		}
 		view.Render(w, r, map[string]interface{}{"Contacts": svc.All()})
@@ -214,5 +219,40 @@ func HandleCountGet(svc *Service) http.HandlerFunc {
 		time.Sleep(1 * time.Second)
 		_, _ = w.Write([]byte(fmt.Sprintf(
 			"(%d total Contacts)", len(svc.Contacts))))
+	}
+}
+
+func HandleStartArchive(view *views.View) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		archiver := GetArchiver()
+		archiver.Run()
+		view.Render(w, r, map[string]interface{}{
+			"Archiver": archiver,
+		})
+	}
+}
+
+func HandleArchiveContent() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		manager := GetArchiver()
+		archiveFile, e := os.Open(manager.ArchiveFile())
+		if e != nil {
+			http.Error(w, "Archive Not Found", http.StatusNotFound)
+			return
+		}
+		defer archiveFile.Close()
+		w.Header().Set("Content-Disposition", "attachment; filename=\"archive.json\"")
+		w.Header().Set("Content-Type", "application/json")
+		http.ServeContent(w, r, "archive.json", time.Now(), archiveFile)
+	}
+}
+
+func HandleArchiveReset(view *views.View) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		archiver := GetArchiver()
+		archiver.Reset()
+		view.Render(w, r, map[string]interface{}{
+			"Archiver": archiver,
+		})
 	}
 }
