@@ -1,7 +1,7 @@
 Hypermedia Systems - Contact App
 ================================
 
-# A Go Implementation
+## A Go Implementation
 
 This repository contains a Go implementation of the example [`Contacts App` project][0] used in the [Hypermedia Systems book][1].
 
