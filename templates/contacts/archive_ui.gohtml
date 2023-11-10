@@ -1,0 +1,26 @@
+{{ define "archive_ui" }}
+    <div id="archive-ui"
+         hx-target="this"
+         hx-swap="outerHTML">
+        {{ if eq .Status "Waiting" }}
+            <button hx-post="/contacts/archive">
+                Download Contact Archive
+            </button>
+        {{ else if eq .Status "Running" }}
+            <div hx-get="/contacts/archive"
+                 hx-trigger="load delay:500ms">
+                Creating Archive...
+                <div class="progress">
+                    <div class="progress-bar"
+                         role="progressbar"
+                         aria-valuenow="{{ .ProgressPercent }}"
+                         style="width: {{ .ProgressPercent }}%"></div>
+                </div>
+            </div>
+        {{ end }}
+    </div>
+{{ end }}
+
+{{ define "part" }}
+    {{ template "archive_ui" .Data.Archiver }}
+{{ end }}
