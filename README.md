@@ -1,13 +1,9 @@
-# Chapter 07 - A Dynamic Archive UI
+# Chapter 09 - Client Side Scripting
 
-Go implementation of the [example Contact App][0] code in Chapter 07 of the [Hypermedia Systems][1] book.
+Go implementation of the [example Contact App][0] code in Chapter 09 of the [Hypermedia Systems][1] book.
 
 > [!NOTE]  
 > See the [main][2] branch for an index of all implemented chapters.
-
-# Auto-Download Implementation
-
-The Auto-Download functionality described in the last section of this chapter is commented out in the [archive_ui.gohtml](templates/contacts/archive_ui.gohtml) file. This is the only use of the `_hyperscript` for this chapter.
 
 # Running
 
