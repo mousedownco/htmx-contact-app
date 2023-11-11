@@ -8,6 +8,8 @@
         <input id="search"
                type="search"
                name="q"
+               _="on keydown[altKey and code is 'KeyS'] from the window me.focus()"
+               placeholder="Search Contacts"
                value="{{ .Data.Query }}"
                hx-get="/contacts"
                hx-trigger="search, keyup delay:200ms changed"
@@ -22,7 +24,25 @@
         <input type="submit"
                value="Search"/>
     </form>
-    <form>
+    <form x-data="{ selected: [] }">
+        <template x-if="selected.length > 0">
+            <div class="box info tool-bar flxed top">
+                <slot x-text="selected.length"></slot>
+                contacts selected
+
+                <button type="button"
+                        class="bad bg color border"
+                        @click="confirm(`Delete ${selected.length} contacts?`) &&
+                    htmx.ajax('POST', '/contacts/delete', { source: $root, target: document.body })">
+                    Delete
+                </button>
+                <hr aria-orientation="vertical">
+                <button type="button"
+                        @click="selected = []">
+                    Cancel
+                </button>
+            </div>
+        </template>
         <table>
             <thead>
             <tr>
