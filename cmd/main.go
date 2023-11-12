@@ -54,6 +54,12 @@ func main() {
 	r.Handle("/contacts/archive/file",
 		contacts.HandleArchiveContent()).Methods("GET")
 
+	r.Handle("/api/v1/contacts", contacts.HandleJson(cs)).Methods("GET")
+	r.Handle("/api/v1/contacts", contacts.HandleJsonNew(cs)).Methods("POST")
+	r.Handle("/api/v1/contacts/{id:[0-9]+}", contacts.HandleJsonView(cs)).Methods("GET")
+	r.Handle("/api/v1/contacts/{id:[0-9]+}", contacts.HandleJsonEdit(cs)).Methods("PUT")
+	r.Handle("/api/v1/contacts/{id:[0-9]+}", contacts.HandleJsonDelete(cs)).Methods("DELETE")
+
 	log.Printf("Starting server on port %s", port)
 	http.Handle("/", r)
 	_ = http.ListenAndServe(port, nil)
