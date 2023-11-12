@@ -1,6 +1,6 @@
-# Chapter 09 - Client Side Scripting
+# Chapter 10 - JSON Data APIs & Hypermedia-Driven Applications
 
-Go implementation of the [example Contact App][0] code in Chapter 09 of the [Hypermedia Systems][1] book.
+Go implementation of the [example Contact App][0] code in Chapter 10 of the [Hypermedia Systems][1] book.
 
 > [!NOTE]  
 > See the [main][2] branch for an index of all implemented chapters.
