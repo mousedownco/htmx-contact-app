@@ -12,6 +12,7 @@ Example code for select chapters are available in separate branches:
  * [Chapter 06][6] - Branch [Ch06-More_Htmx_Patterns](../../tree/Ch06-More_Htmx_Patterns)
  * [Chapter 07][7] - Branch [Ch07-A_Dynamic_Archive_UI](../../tree/Ch07-A_Dynamic_Archive_UI)
  * [Chapter 09][9] - Branch [Ch09-Client_Side_Scripting](../../tree/Ch09-Client_Side_Scripting)
+ * [Chapter 10][10] - Branch [Ch10-JSON_Data_APIs](../../tree/Ch10-JSON_Data_APIs)
 
 ## Implementation Notes
 
@@ -26,6 +27,7 @@ The view elements are based on [Jon Calhoun's article "Creating the V in MVC"][1
 [6]: https://hypermedia.systems/more-htmx-patterns/ "Chapter 06 - More Htmx Patterns"
 [7]: https://hypermedia.systems/a-dynamic-archive-ui/ "Chapter 07 - A Dynamic Archive UI"
 [9]: https://hypermedia.systems/client-side-scripting/ "Chapter 09 - Client-Side Scripting"
+[10]: https://hypermedia.systems/json-data-apis/ "Chapter 10 - JSON Data APIs & Hypermedia-Driven Applications"
 [100]: https://www.calhoun.io/intro-to-templates-p4-v-in-mvc/ "Creating the V in MVC"
 [101]: https://github.com/gorilla/mux "Gorilla Mux"
 [102]: https://github.com/gorilla/sessions "Gorilla Sessions"
