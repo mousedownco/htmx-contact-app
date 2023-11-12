@@ -54,6 +54,9 @@ func main() {
 	r.Handle("/contacts/archive/file",
 		contacts.HandleArchiveContent()).Methods("GET")
 
+	r.Handle("/api/v1/contacts", contacts.HandleJson(cs)).Methods("GET")
+	r.Handle("/api/v1/contacts", contacts.HandleJsonNew(cs)).Methods("POST")
+
 	log.Printf("Starting server on port %s", port)
 	http.Handle("/", r)
 	_ = http.ListenAndServe(port, nil)

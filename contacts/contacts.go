@@ -96,10 +96,10 @@ func (s *Service) Validate(c Contact) map[string]string {
 	return vErrors
 }
 
-func (s *Service) Save(c Contact) error {
+func (s *Service) Save(c Contact) (Contact, error) {
 	v := s.Validate(c)
 	if len(v) > 0 {
-		return errors.New(fmt.Sprintf("unresolved errors: %v", v))
+		return c, errors.New(fmt.Sprintf("unresolved errors: %v", v))
 	}
 	if c.Id == 0 {
 		var maxId int
@@ -111,7 +111,7 @@ func (s *Service) Save(c Contact) error {
 		c.Id = maxId + 1
 	}
 	s.Contacts[c.Id] = c
-	return s.SaveDb()
+	return c, s.SaveDb()
 }
 
 func (s *Service) Delete(id int) error {

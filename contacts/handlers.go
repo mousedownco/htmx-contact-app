@@ -1,6 +1,7 @@
 package contacts
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/mousedownco/htmx-contact-app/views"
@@ -54,7 +55,7 @@ func HandleNewPost(svc *Service, view *views.View) http.HandlerFunc {
 				"Errors":  vErrors,
 			})
 		} else {
-			e := svc.Save(c)
+			c, e := svc.Save(c)
 			if e != nil {
 				view.Render(w, r, map[string]interface{}{
 					"Contact": c,
@@ -128,7 +129,7 @@ func HandleEditPost(svc *Service, view *views.View) http.HandlerFunc {
 				"Errors":  vErrors,
 			})
 		} else {
-			e = svc.Save(c)
+			c, e = svc.Save(c)
 			if e != nil {
 				view.Render(w, r, map[string]interface{}{
 					"Contact": c,
@@ -254,5 +255,46 @@ func HandleArchiveReset(view *views.View) http.HandlerFunc {
 		view.Render(w, r, map[string]interface{}{
 			"Archiver": archiver,
 		})
+	}
+}
+
+func HandleJson(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]interface{}{
+			"contacts": svc.All(),
+		}
+		j, e := json.Marshal(response)
+		if e != nil {
+			http.Error(w, "Error marshalling JSON", http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write(j)
+	}
+}
+
+func HandleJsonNew(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		c := Contact{
+			First: r.FormValue("first_name"),
+			Last:  r.FormValue("last_name"),
+			Phone: r.FormValue("phone"),
+			Email: r.FormValue("email"),
+		}
+		w.Header().Set("Content-Type", "application/json")
+		var response []byte
+		vErrors := svc.Validate(c)
+		if len(vErrors) > 0 {
+			response, _ = json.Marshal(map[string]interface{}{"errors": vErrors})
+		} else {
+			c, e := svc.Save(c)
+			if e != nil {
+				response, _ = json.Marshal(map[string]interface{}{"errors": map[string]string{"General": e.Error()}})
+				w.WriteHeader(http.StatusBadRequest)
+			} else {
+				response, _ = json.Marshal(c)
+			}
+		}
+		_, _ = w.Write(response)
 	}
 }
