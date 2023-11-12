@@ -298,3 +298,76 @@ func HandleJsonNew(svc *Service) http.HandlerFunc {
 		_, _ = w.Write(response)
 	}
 }
+
+func HandleJsonView(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		mux.Vars(r)
+		id, e := strconv.Atoi(mux.Vars(r)["id"])
+		if e != nil {
+			http.Error(w, "Contact Not Found", http.StatusNotFound)
+			return
+		}
+		c := svc.Find(id)
+		if (c == Contact{}) {
+			http.Error(w, "Contact Not Found", http.StatusNotFound)
+			return
+		}
+		response, _ := json.Marshal(c)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write(response)
+	}
+}
+
+func HandleJsonEdit(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		mux.Vars(r)
+		id, e := strconv.Atoi(mux.Vars(r)["id"])
+		if e != nil {
+			http.Error(w, "Contact Not Found", http.StatusNotFound)
+			return
+		}
+		c := svc.Find(id)
+		c.First = r.FormValue("first_name")
+		c.Last = r.FormValue("last_name")
+		c.Phone = r.FormValue("phone")
+		c.Email = r.FormValue("email")
+
+		w.Header().Set("Content-Type", "application/json")
+		var response []byte
+		vErrors := svc.Validate(c)
+		if len(vErrors) > 0 {
+			w.WriteHeader(http.StatusBadRequest)
+			response, _ = json.Marshal(map[string]interface{}{"errors": vErrors})
+		} else {
+			c, e = svc.Save(c)
+			if e != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				response, _ = json.Marshal(map[string]interface{}{"errors": map[string]string{"General": e.Error()}})
+			} else {
+				response, _ = json.Marshal(c)
+			}
+		}
+		_, _ = w.Write(response)
+	}
+}
+
+func HandleJsonDelete(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		mux.Vars(r)
+		id, e := strconv.Atoi(mux.Vars(r)["id"])
+		if e != nil {
+			http.Error(w, "Contact Not Found", http.StatusNotFound)
+			return
+		}
+		var response []byte
+		e = svc.Delete(id)
+		if e != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			response, _ = json.Marshal(map[string]interface{}{"errors": map[string]string{"General": e.Error()}})
+		} else {
+			response, _ = json.Marshal(map[string]interface{}{"success": true})
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write(response)
+	}
+}
